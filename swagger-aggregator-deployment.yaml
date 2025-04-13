@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-aggregator
+spec:
+  selector:
+    matchLabels:
+      app: swagger-aggregator
+  template:
+    metadata:
+      labels:
+        app: swagger-aggregator
+    spec:
+      containers:
+        - name: swagger-aggregator
+          image: msa_project_pms_final-swagger-aggregator
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 9090
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swagger-aggregator
+spec:
+  selector:
+    app: swagger-aggregator
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
